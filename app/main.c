@@ -6,6 +6,8 @@
 #include "../hw/rtc.h"
 #include "../hw/nvic.h"
 #include "../hw/exti.h"
+#include "../hw/scb.h"
+#include "../hw/pwr.h"
 #include "hw_init.h"
 #include "display.h"
 #include "input.h"
@@ -22,6 +24,13 @@ void __isr nvic_rtc_handler(void)
         rtc_clear_alarm_flag();
         exti_ack_pending(EXTI_LINE_17);
         nvic_clear_pending_interrupt(NVIC_IR_2);
+}
+
+static void setup_sleep_mode(void)
+{
+        scb_set_sleep_mode(SCB_DEEP_SLEEP);
+        pwr_disable_pdds();
+        pwr_enable_lpds();
 }
 
 // d2 - d1
@@ -102,7 +111,6 @@ static void print_main_screen(void)
         }
 
         // current date
-        //display_draw_text(4 * TILE_WIDTH, 13 * TILE_HEIGHT, get_day_of_week(&cur_date));
         display_draw_text(14 * TILE_WIDTH, 13 * TILE_HEIGHT, cur_date_str);
 
         display_trigger_update(WF_MODE_GC);
@@ -112,8 +120,7 @@ static void print_main_screen(void)
 void __noreturn main(void)
 {
         hw_init();
-
-        //battery_init();
+        setup_sleep_mode();
         display_init();
         input_init();
 
@@ -121,7 +128,6 @@ void __noreturn main(void)
         display_start();
         display_clear();
         display_stop();
-
 
         enter_init_date_enter_routine();
 
