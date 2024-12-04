@@ -16,7 +16,7 @@ LD_SCRIPT := boot/memory.ld
 LD_MAP_FILE := $(subst .elf,.map,$(FW_FILE))
 
 CFLAGS += -mcpu=cortex-m0
-CFLAGS += -Og -g
+CFLAGS += -O2
 CFLAGS += -std=c11 -ffreestanding
 CFLAGS += -Wall -Wextra -Wpedantic
 CFLAGS += -ffunction-sections -fdata-sections
