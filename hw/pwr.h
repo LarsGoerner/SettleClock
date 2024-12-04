@@ -14,6 +14,26 @@ struct pwr {
 
 //---------------------------------| PWR_CR |---------------------------------//
 
+static inline void pwr_enable_lpds(void)
+{
+        PWR->C |= BIT(0);
+}
+
+static inline void pwr_disable_lpds(void)
+{
+        PWR->C &= ~BIT(0);
+}
+
+static inline void pwr_enable_pdds(void)
+{
+        PWR->C |= BIT(1);
+}
+
+static inline void pwr_disable_pdds(void)
+{
+        PWR->C &= ~BIT(1);
+}
+
 static inline void pwr_disable_bdp(void)
 {
         PWR->C |= BIT(8);
